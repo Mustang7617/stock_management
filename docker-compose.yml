@@ -1,0 +1,28 @@
+version: '3.7'
+
+services:
+  go-app:
+    container_name: Stock_management
+    image: go-app:1.0.1
+    build: .
+    environment:
+      DATABASE_URL: "host=go_db user=admin password=123456 dbname=stock_db sslmode=disable"
+    ports:
+      - "8001:8001"
+    depends_on:
+      - go_db
+
+  go_db:
+    container_name: go_db
+    image: postgres:12
+    environment:
+      POSTGRES_PASSWORD: 123456
+      POSTGRES_USER: stock
+      POSTGRES_DB: stock_db
+    ports:
+      - "5433:5432"   # Use default PostgreSQL port
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:  
+  pgdata: {}
